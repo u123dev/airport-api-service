@@ -11,15 +11,18 @@ def set_filename(new_filename, filename: str) -> pathlib.Path:
     return (f"{slugify(new_filename)}-{uuid.uuid4()}"
             + pathlib.Path(filename).suffix)
 
+
 def crew_image_path(instance, filename: str) -> pathlib.Path:
     return pathlib.Path("upload/crews") / pathlib.Path(
         set_filename(instance.full_name, filename)
     )
 
+
 def airplane_image_path(instance, filename: str) -> pathlib.Path:
     return pathlib.Path("upload/airplanes") / pathlib.Path(
         set_filename(instance.name, filename)
     )
+
 
 class Country(models.Model):
     name = models.CharField(max_length=255, unique=True)
