@@ -286,7 +286,9 @@ class OrderViewSet(
     GenericViewSet,
 ):
     queryset = Order.objects.prefetch_related(
-        "tickets__flight__route", "tickets__flight__airplane"
+        "tickets__flight__route",
+        "tickets__flight__airplane",
+        "ticlets__flight__crew",
     )
     serializer_class = OrderSerializer
     pagination_class = OrderPagination

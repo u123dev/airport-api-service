@@ -21,7 +21,10 @@ def crew_image_path(instance, filename: str) -> pathlib.Path:
 
 def airplane_image_path(instance, filename: str) -> pathlib.Path:
     return pathlib.Path("upload/airplanes") / pathlib.Path(
-        set_filename(f"{instance.name}  {instance.airplane_type.name}", filename)
+        set_filename(
+            f"{instance.name} {instance.airplane_type.name}",
+            filename
+        )
     )
 
 
@@ -259,5 +262,7 @@ class Ticket(models.Model):
         ]
 
     def __str__(self):
-        return (f"Order: {self.order} | "
-                f"Flight: {self.flight} - (row: {self.row}, seat: {self.seat})")
+        return (
+            f"Order: {self.order} | "
+            f"Flight: {self.flight} - (row: {self.row}, seat: {self.seat})"
+        )

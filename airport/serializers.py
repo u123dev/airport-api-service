@@ -2,7 +2,18 @@ from django.db import transaction
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from airport.models import Country, City, Airport, Route, Crew, AirplaneType, Airplane, Flight, Ticket, Order
+from airport.models import (
+    Country,
+    City,
+    Airport,
+    Route,
+    Crew,
+    AirplaneType,
+    Airplane,
+    Flight,
+    Ticket,
+    Order
+)
 
 
 class CountrySerializer(serializers.ModelSerializer):
@@ -31,7 +42,11 @@ class AirportSerializer(serializers.ModelSerializer):
 
 
 class AirportListSerializer(AirportSerializer):
-    closest_big_city = serializers.SlugRelatedField(slug_field="name", read_only=True)
+    closest_big_city = serializers.SlugRelatedField(
+        slug_field="name",
+        read_only=True
+    )
+
 
 class RouteSerializer(serializers.ModelSerializer):
 
@@ -49,7 +64,10 @@ class RouteSerializer(serializers.ModelSerializer):
 
 class RouteListSerializer(RouteSerializer):
     source = serializers.SlugRelatedField(slug_field="name", read_only=True)
-    destination = serializers.SlugRelatedField(slug_field="name", read_only=True)
+    destination = serializers.SlugRelatedField(
+        slug_field="name",
+        read_only=True
+    )
 
 
 class RouteDetailSerializer(RouteSerializer):
@@ -81,16 +99,29 @@ class AirplaneTypeSerializer(serializers.ModelSerializer):
 class AirplaneSerializer(serializers.ModelSerializer):
     class Meta:
         model = Airplane
-        fields = ("id", "name", "rows", "seats_in_row", "airplane_type", "airplane_photo")
+        fields = (
+            "id",
+            "name",
+            "rows",
+            "seats_in_row",
+            "airplane_type",
+            "airplane_photo"
+        )
         read_only_fields = ("airplane_photo", )
 
 
 class AirplaneListSerializer(AirplaneSerializer):
-    airplane_type = serializers.SlugRelatedField(slug_field="name", read_only=True)
+    airplane_type = serializers.SlugRelatedField(
+        slug_field="name",
+        read_only=True
+    )
 
 
 class AirplanePhotoSerializer(serializers.ModelSerializer):
-    airplane_type = serializers.SlugRelatedField(slug_field="name", read_only=True)
+    airplane_type = serializers.SlugRelatedField(
+        slug_field="name",
+        read_only=True
+    )
 
     class Meta:
         model = Airplane
@@ -103,14 +134,33 @@ class FlightSerializer(serializers.ModelSerializer):
     # crew = CrewSerializer(many=True, read_only=True)
     class Meta:
         model = Flight
-        fields = ("id", "departure_time", "arrival_time", "route", "airplane", "crew")
+        fields = (
+            "id",
+            "departure_time",
+            "arrival_time",
+            "route",
+            "airplane",
+            "crew"
+        )
 
 
 class FlightListSerializer(FlightSerializer):
-    route_source = serializers.CharField(source="route.source.name", read_only=True)
-    route_destination = serializers.CharField(source="route.destination.name", read_only=True)
-    airplane_name = serializers.CharField(source="airplane.name", read_only=True)
-    airplane_image = serializers.ImageField(source="airplane.image", read_only=True)
+    route_source = serializers.CharField(
+        source="route.source.name",
+        read_only=True
+    )
+    route_destination = serializers.CharField(
+        source="route.destination.name",
+        read_only=True
+    )
+    airplane_name = serializers.CharField(
+        source="airplane.name",
+        read_only=True
+    )
+    airplane_image = serializers.ImageField(
+        source="airplane.image",
+        read_only=True
+    )
     crew = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="full_name"
     )
@@ -176,7 +226,15 @@ class FlightDetailSerializer(FlightSerializer):
 
     class Meta:
         model = Flight
-        fields = ("id", "departure_time", "arrival_time", "route", "taken_places", "airplane", "crew")
+        fields = (
+            "id",
+            "departure_time",
+            "arrival_time",
+            "route",
+            "taken_places",
+            "airplane",
+            "crew"
+        )
 
 
 ############
