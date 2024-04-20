@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import F
 from django.utils.text import slugify
+from rest_framework.exceptions import ValidationError
 
 
 def set_filename(new_filename, filename: str) -> pathlib.Path:
@@ -20,7 +21,7 @@ def crew_image_path(instance, filename: str) -> pathlib.Path:
 
 def airplane_image_path(instance, filename: str) -> pathlib.Path:
     return pathlib.Path("upload/airplanes") / pathlib.Path(
-        set_filename(instance.name, filename)
+        set_filename(f"{instance.name}  {instance.airplane_type.name}", filename)
     )
 
 
@@ -207,6 +208,47 @@ class Ticket(models.Model):
         related_name="tickets"
     )
 
+    @staticmethod
+    def validate_ticket(row, seat, airplane, error_to_raise):
+        for ticket_attr_value, ticket_attr_name, airplane_attr_name in [
+            (row, "row", "rows"),
+            (seat, "seat", "seats_in_row"),
+        ]:
+            count_attrs = getattr(airplane, airplane_attr_name)
+            if not (1 <= ticket_attr_value <= count_attrs):
+                raise error_to_raise(
+                    {
+                        ticket_attr_name: f"{ticket_attr_name} "
+                        f"number must be in available range: "
+                        f"(1, {airplane_attr_name}): "
+                        f"(1, {count_attrs})"
+                    }
+                )
+
+    def clean(self):
+        Ticket.validate_ticket(
+            self.row,
+            self.seat,
+            self.flight.airplane,
+            ValidationError,
+        )
+
+    def save(
+        self,
+        force_insert=False,
+        force_update=False,
+        using=None,
+        update_fields=None,
+    ):
+        self.full_clean()
+        return super(Ticket, self).save(
+            force_insert, force_update, using, update_fields
+        )
+
+    # class Meta:
+    #     unique_together = ("flight", "row", "seat")
+    #     ordering = ["row", "seat"]
+
     class Meta:
         ordering = ("flight", "row", "seat")
         constraints = [
@@ -218,4 +260,4 @@ class Ticket(models.Model):
 
     def __str__(self):
         return (f"Order: {self.order} | "
-                f"Flight: {self.flight} - Row: {self.row} - Seat: {self.seat}")
+                f"Flight: {self.flight} - (row: {self.row}, seat: {self.seat})")
