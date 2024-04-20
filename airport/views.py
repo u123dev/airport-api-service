@@ -170,11 +170,9 @@ class CrewViewSet(
         crew = self.get_object()
         serializer = self.get_serializer(crew, data=request.data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class AirplaneTypeViewSet(
@@ -185,7 +183,7 @@ class AirplaneTypeViewSet(
     mixins.ListModelMixin,
     GenericViewSet,
 ):
-    queryset = AirplaneType.objects.all()
+    queryset = AirplaneType.objects.all().select_related("airplane_type")
     serializer_class = AirplaneTypeSerializer
 
 
@@ -218,11 +216,9 @@ class AirplaneViewSet(
         airplane = self.get_object()
         serializer = self.get_serializer(airplane, data=request.data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 ########
@@ -288,7 +284,7 @@ class OrderViewSet(
     queryset = Order.objects.prefetch_related(
         "tickets__flight__route",
         "tickets__flight__airplane",
-        "ticlets__flight__crew",
+        "tickets__flight__crew",
     )
     serializer_class = OrderSerializer
     pagination_class = OrderPagination
