@@ -1,15 +1,44 @@
 from django.db.models import F, Count, Q
+from django_filters import rest_framework as filters
+from django_filters.filters import DateFromToRangeFilter
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from airport.models import Country, City, Airport, Route, Crew, AirplaneType, Airplane, Flight, Order
-from airport.serializers import CountrySerializer, CitySerializer, CityListSerializer, AirportListSerializer, \
-    AirportSerializer, RouteSerializer, RouteListSerializer, CrewSerializer, CrewPhotoSerializer, \
-    AirplaneTypeSerializer, AirplaneSerializer, AirplanePhotoSerializer, AirplaneListSerializer, FlightListSerializer, \
-    FlightSerializer, FlightDetailSerializer, RouteDetailSerializer, OrderSerializer, OrderListSerializer
+from airport.models import (
+    Country,
+    City,
+    Airport,
+    Route,
+    Crew,
+    AirplaneType,
+    Airplane,
+    Flight,
+    Order
+)
+from airport.serializers import (
+    CountrySerializer,
+    CitySerializer,
+    CityListSerializer,
+    AirportListSerializer,
+    AirportSerializer,
+    RouteSerializer,
+    RouteListSerializer,
+    CrewSerializer,
+    CrewPhotoSerializer,
+    AirplaneTypeSerializer,
+    AirplaneSerializer,
+    AirplanePhotoSerializer,
+    AirplaneListSerializer,
+    FlightListSerializer,
+    FlightSerializer,
+    FlightDetailSerializer,
+    RouteDetailSerializer,
+    OrderSerializer,
+    OrderListSerializer
+)
 
 
 class CountryViewSet(
@@ -89,13 +118,15 @@ class RouteViewSet(
             dest_str = self.request.query_params.get("dest")
             if src_str:
                 queryset = queryset.filter(
-                    Q(source__name__icontains=src_str) |
-                    Q(source__closest_big_city__name__icontains=src_str)
+                    Q(source__name__icontains=src_str)
+                    | Q(source__closest_big_city__name__icontains=src_str)
                 )
             if dest_str:
                 queryset = queryset.filter(
-                    Q(destination__name__icontains=dest_str) |
-                    Q(destination__closest_big_city__name__icontains=dest_str)
+                    Q(destination__name__icontains=dest_str)
+                    | Q(
+                        destination__closest_big_city__name__icontains=dest_str
+                    )
                 )
             return queryset.select_related(
                 "source__closest_big_city",
@@ -195,6 +226,27 @@ class AirplaneViewSet(
 
 
 ########
+class FlightFilter(filters.FilterSet):
+    src = filters.CharFilter(
+        field_name="route__source__name",
+        lookup_expr="icontains"
+    )
+    dest = filters.CharFilter(
+        field_name="route__destination__name",
+        lookup_expr="icontains"
+    )
+    departure_date = DateFromToRangeFilter(field_name="departure_time")
+    arrival_date = DateFromToRangeFilter(field_name="arrival_time")
+
+    class Meta:
+        model = Flight
+        fields = [
+            "route__source__name",
+            "route__destination__name",
+            "departure_time",
+            "arrival_time"
+        ]
+
 
 class FlightViewSet(viewsets.ModelViewSet):
     queryset = (
@@ -205,10 +257,12 @@ class FlightViewSet(viewsets.ModelViewSet):
                 F("airplane__rows") * F("airplane__seats_in_row")
                 - Count("tickets")
             )
-        )
+        ).prefetch_related("crew")
     )
     serializer_class = FlightSerializer
     # permission_classes = (IsAdminOrIfAuthenticatedReadOnly,)
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = FlightFilter
 
     def get_serializer_class(self):
         if self.action == "list":
