@@ -85,7 +85,7 @@ py manage.py loaddata data.json
 ```
 py manage.py runserver
 ```
-7. Access Airplane API Service in your browser: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+7. Access Airplane API Service in your browser: [http://127.0.0.1:8000/api/airport/](http://127.0.0.1:8000/api/airport/)
 
 ---
 
@@ -123,6 +123,7 @@ Redoc via:
 - **api/doc/redoc/**
 
 ### Demo
+![API](airport-demo-02.jpg "Airport API Service Project")
 
 ![API](airport-demo.jpg "Airport API Service Project")
 
