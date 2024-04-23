@@ -248,10 +248,6 @@ class Ticket(models.Model):
             force_insert, force_update, using, update_fields
         )
 
-    # class Meta:
-    #     unique_together = ("flight", "row", "seat")
-    #     ordering = ["row", "seat"]
-
     class Meta:
         ordering = ("flight", "row", "seat")
         constraints = [
