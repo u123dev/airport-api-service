@@ -5,7 +5,12 @@ from rest_framework.test import APIClient
 
 from airport.models import Order
 from airport.serializers import OrderListSerializer, OrderSerializer
-from airport.tests.init_sample import init_sample_user, init_sample_superuser, init_sample_flight, init_sample_order
+from airport.tests.init_sample import (
+    init_sample_user,
+    init_sample_superuser,
+    init_sample_flight,
+    init_sample_order
+)
 
 ORDER_URL = reverse("airport:order-list")
 ORDER_DETAIL = "airport:order-detail"
@@ -78,7 +83,6 @@ class AdminOrderApiTests(TestCase):
 
         self.assertEqual(res.data, serializer.data)
 
-###############
     def test_update_order(self):
         order = init_sample_order(user=self.user)
         res = self.client.put(detail_url(order.id))

@@ -111,12 +111,12 @@ class AuthenticatedFlightApiTests(TestCase):
 
     def test_filter_flights_by_departure_date_after(self):
         departure_date_after = datetime.now()
-        route1 = init_sample_route()
-        route2 = init_sample_route()
-        route3 = init_sample_route()
-        flight1 = init_sample_flight(route=route1, departure_time=departure_date_after - timedelta(days=2))
-        flight2 = init_sample_flight(route=route2, departure_time=departure_date_after)
-        flight3 = init_sample_flight(route=route3, departure_time=departure_date_after + timedelta(days=10))
+        flight1 = init_sample_flight(route=init_sample_route(),
+                                     departure_time=departure_date_after - timedelta(days=2))
+        flight2 = init_sample_flight(route=init_sample_route(),
+                                     departure_time=departure_date_after)
+        flight3 = init_sample_flight(route=init_sample_route(),
+                                     departure_time=departure_date_after + timedelta(days=10))
         res = self.client.get(FLIGHT_URL, {"departure_date_after": departure_date_after.date()})
 
         flights = (
@@ -132,12 +132,12 @@ class AuthenticatedFlightApiTests(TestCase):
 
     def test_filter_flights_by_departure_date_before(self):
         departure_date_before = datetime.now() + timedelta(days=2)
-        route1 = init_sample_route()
-        route2 = init_sample_route()
-        route3 = init_sample_route()
-        flight1 = init_sample_flight(route=route1, departure_time=departure_date_before - timedelta(days=1))
-        flight2 = init_sample_flight(route=route2, departure_time=departure_date_before)
-        flight3 = init_sample_flight(route=route3, departure_time=departure_date_before + timedelta(days=3))
+        flight1 = init_sample_flight(route=init_sample_route(),
+            departure_time=departure_date_before - timedelta(days=1))
+        flight2 = init_sample_flight(route=init_sample_route(),
+            departure_time=departure_date_before)
+        flight3 = init_sample_flight(route=init_sample_route(),
+            departure_time=departure_date_before + timedelta(days=3))
         res = self.client.get(FLIGHT_URL, {"departure_date_after": departure_date_before.date()})
 
         flights = (
@@ -153,12 +153,12 @@ class AuthenticatedFlightApiTests(TestCase):
 
     def test_filter_flights_by_arrival_date_after(self):
         arrival_date_after = datetime.now() + timedelta(days=3)
-        route1 = init_sample_route()
-        route2 = init_sample_route()
-        route3 = init_sample_route()
-        flight1 = init_sample_flight(route=route1, arrival_time=arrival_date_after - timedelta(days=2))
-        flight2 = init_sample_flight(route=route2, arrival_time=arrival_date_after)
-        flight3 = init_sample_flight(route=route3, arrival_time=arrival_date_after + timedelta(days=5))
+        flight1 = init_sample_flight(route=init_sample_route(),
+                                     arrival_time=arrival_date_after - timedelta(days=2))
+        flight2 = init_sample_flight(route=init_sample_route(),
+                                     arrival_time=arrival_date_after)
+        flight3 = init_sample_flight(route=init_sample_route(),
+                                     arrival_time=arrival_date_after + timedelta(days=5))
         res = self.client.get(FLIGHT_URL, {"arrival_date_after": arrival_date_after.date()})
 
         flights = (
@@ -174,12 +174,12 @@ class AuthenticatedFlightApiTests(TestCase):
 
     def test_filter_flights_by_arrival_date_before(self):
         arrival_date_before = datetime.now() + timedelta(days=2)
-        route1 = init_sample_route()
-        route2 = init_sample_route()
-        route3 = init_sample_route()
-        flight1 = init_sample_flight(route=route1, departure_time=arrival_date_before - timedelta(days=1))
-        flight2 = init_sample_flight(route=route2, departure_time=arrival_date_before)
-        flight3 = init_sample_flight(route=route3, departure_time=arrival_date_before + timedelta(days=3))
+        flight1 = init_sample_flight(route=init_sample_route(),
+                                     departure_time=arrival_date_before - timedelta(days=1))
+        flight2 = init_sample_flight(route=init_sample_route(),
+                                     departure_time=arrival_date_before)
+        flight3 = init_sample_flight(route=init_sample_route(),
+                                     departure_time=arrival_date_before + timedelta(days=3))
         res = self.client.get(FLIGHT_URL, {"arrival_date_after": arrival_date_before.date()})
 
         flights = (

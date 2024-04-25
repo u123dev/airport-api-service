@@ -2,7 +2,18 @@ from datetime import datetime, timedelta
 
 from django.contrib.auth import get_user_model
 
-from airport.models import Country, City, Airport, Route, AirplaneType, Airplane, Crew, Flight, Order, Ticket
+from airport.models import (
+    Country,
+    City,
+    Airport,
+    Route,
+    AirplaneType,
+    Airplane,
+    Crew,
+    Flight,
+    Order,
+    Ticket
+)
 
 
 def init_sample_user():
