@@ -74,18 +74,18 @@ or
 ```
 py manage.py migrate
 ```
-4. Load demo data from fixture:
+5. Load demo data from fixture:
 ```
 py manage.py loaddata data.json
 ```
-5. After loading demo data you can use test user:
+6. After loading demo data you can use test user:
   - Login: `admin@email.com`
   - Password: `admin`
-6. Run project:
+7. Run project:
 ```
 py manage.py runserver
 ```
-7. Access Airplane API Service in your browser: [http://127.0.0.1:8000/api/airport/](http://127.0.0.1:8000/api/airport/)
+8. Access Airplane API Service in your browser: [http://127.0.0.1:8000/api/airport/](http://127.0.0.1:8000/api/airport/)
 
 ---
 
