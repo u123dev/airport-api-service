@@ -129,9 +129,7 @@ class AirplanePhotoSerializer(serializers.ModelSerializer):
         read_only_fields = ("name", "airplane_type", )
 
 
-################
 class FlightSerializer(serializers.ModelSerializer):
-    # crew = CrewSerializer(many=True, read_only=True)
     class Meta:
         model = Flight
         fields = (
@@ -164,10 +162,6 @@ class FlightListSerializer(FlightSerializer):
     crew = serializers.SlugRelatedField(
         many=True, read_only=True, slug_field="full_name"
     )
-    # crew = CrewSerializer(many=True, read_only=True)
-    # cinema_hall_name = serializers.CharField(
-    #     source="cinema_hall.name", read_only=True
-    # )
     airplane_capacity = serializers.IntegerField(
         source="airplane.capacity", read_only=True
     )
@@ -188,7 +182,6 @@ class FlightListSerializer(FlightSerializer):
         )
 
 
-##########
 class TicketSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         data = super(TicketSerializer, self).validate(attrs=attrs)
@@ -215,7 +208,6 @@ class TicketSeatsSerializer(TicketSerializer):
         fields = ("row", "seat")
 
 
-############
 class FlightDetailSerializer(FlightSerializer):
     route = RouteDetailSerializer(many=False, read_only=True)
     airplane = AirplaneListSerializer(many=False, read_only=True)
@@ -237,7 +229,6 @@ class FlightDetailSerializer(FlightSerializer):
         )
 
 
-############
 class OrderSerializer(serializers.ModelSerializer):
     tickets = TicketSerializer(many=True, read_only=False, allow_empty=False)
 
